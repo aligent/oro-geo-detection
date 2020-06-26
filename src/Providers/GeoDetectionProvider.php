@@ -3,7 +3,11 @@
 namespace Aligent\GeoDetectionBundle\Providers;
 
 use Doctrine\Common\Cache\CacheProvider;
+use GeoIp2\Exception\AddressNotFoundException;
+use Oro\Bundle\FrontendBundle\Request\FrontendHelper;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use GeoIp2\Database\Reader;
 
 /**
  * Class GeoDetectionProvider
@@ -39,36 +43,49 @@ class GeoDetectionProvider
     protected $cache;
 
     /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * GeoDetectionProvider constructor.
      * @param RequestStack $requestStack
      * @param Reader $reader
      * @param FrontendHelper $frontendHelper
      * @param CacheProvider $cache
+     * @param LoggerInterface $logger
      */
     public function __construct(
         RequestStack $requestStack,
         Reader $reader,
         FrontendHelper $frontendHelper,
-        CacheProvider $cache
+        CacheProvider $cache,
+        LoggerInterface $logger
     ) {
         $this->requestStack = $requestStack;
         $this->reader = $reader;
         $this->frontendHelper = $frontendHelper;
         $this->cache = $cache;
+        $this->logger = $logger;
     }
 
     /**
-     * @return string - ISO2 Country Code of the origin IP address
+     * @return string|null - ISO2 Country Code of the origin IP address
+     * @throws \MaxMind\Db\Reader\InvalidDatabaseException
      */
-    public function getClientCountry(): string
+    public function getClientCountry(): ?string
     {
         $request = $this->requestStack->getCurrentRequest();
         $ip = $request->getClientIp();
 
         if (!$this->cache->contains($ip)) {
-            $record = $this->reader->city($request->getClientIp());
-            $country = $record->country->isoCode;
-            $this->cache->save($ip, $country, static::CACHE_TTL);
+            try {
+                $record = $this->reader->city($request->getClientIp());
+                $country = $record->country->isoCode;
+                $this->cache->save($ip, $country, static::CACHE_TTL);
+            } catch (AddressNotFoundException $exception) {
+                $this->logger->debug('Failed to read country code from IP database.');
+            }
         } else {
             $country = $this->cache->fetch($ip);
         }

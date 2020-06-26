@@ -66,6 +66,7 @@ services:
             - '@aligent_geo_detection.reader'
             - '@oro_frontend.request.frontend_helper'
             - '@aligent_geo_detection.cache'
+            - '@logger'
 
     # Cache Provider
     aligent_geo_detection.cache:
