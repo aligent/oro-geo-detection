@@ -25,6 +25,10 @@ class GeoDetectionCountryType extends AbstractType
 {
     const NAME = 'aligent_geo_detection_country';
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add(

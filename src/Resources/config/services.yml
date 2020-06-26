@@ -59,6 +59,20 @@ services:
         arguments:
             - '@oro_config.manager'
 
+    aligent_geo_detection.provider.geo_detection:
+        class: Aligent\GeoDetectionBundle\Providers\GeoDetectionProvider
+        arguments:
+            - '@request_stack'
+            - '@aligent_geo_detection.reader'
+            - '@oro_frontend.request.frontend_helper'
+            - '@aligent_geo_detection.cache'
+
+    # Cache Provider
+    aligent_geo_detection.cache:
+        parent: oro.cache.abstract
+        calls:
+            - [ setNamespace, [ 'geo_ip' ] ]
+
     # Blocks
     aligent_geo_detection.layout.block_type.redirection_block:
         parent: oro_layout.block_type.abstract_configurable
