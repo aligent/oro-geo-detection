@@ -3,6 +3,7 @@
     "description": "A Bundle for OroCommerce to provide application level geo-detection using the maxmind db",
     "type": "library",
     "license": "MIT",
+    "version": "3.1.0",
     "authors": [
         {
             "name": "Adam Hall",
