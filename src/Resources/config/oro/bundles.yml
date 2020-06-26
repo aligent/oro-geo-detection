@@ -1,0 +1,2 @@
+bundles:
+    - { name: Aligent\GeoDetectionBundle\AligentGeoDetectionBundle, priority: 50 }

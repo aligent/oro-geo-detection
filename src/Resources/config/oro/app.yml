@@ -1,0 +1,2 @@
+aligent_geo_detection:
+    database: "%kernel.project_dir%/var/cache/GeoLite2-City.mmdb"

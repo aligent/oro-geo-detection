@@ -1,0 +1,99 @@
+parameters:
+    # Form Types
+    aligent_geo_detection.form.type.geo_detection_countries_collection.class: Aligent\GeoDetectionBundle\Form\Type\GeoDetectionCountriesCollectionType
+    aligent_geo_detection.form.type.geo_detection_country.class:              Aligent\GeoDetectionBundle\Form\Type\GeoDetectionCountryType
+    aligent_geo_detection.form.type.geo_detection_system_config.class:        Aligent\GeoDetectionBundle\Form\Type\GeoDetectionCountriesSystemConfigType
+
+    #GeoIP Reader
+    aligent_geo_detection.reader.class:                                       GeoIp2\Database\Reader
+
+    # Context Configurator
+    aligent_geo_detection.layout_context_configurator.geo_detection.class:    Aligent\GeoDetectionBundle\Layout\Extension\GeoDetectionContextConfigurator
+
+    # Providers
+    aligent_geo_detection.provider.redirection_config_provider.class:         Aligent\GeoDetectionBundle\Providers\RedirectionConfigurationProvider
+
+    # Data Providers
+    aligent_geo_detection.layout.data_provider.redirection_provider.class:    Aligent\GeoDetectionBundle\Layout\DataProvider\RedirectDataProvider
+
+    # Cache Warmer
+    aligent_geo_detection.cache.warmer.class:                                 Aligent\GeoDetectionBundle\Cache\GeoIpCacheWarmer
+services:
+    # Form Types
+    aligent_geo_detection.form.type.geo_detection_countries_collection:
+        class: '%aligent_geo_detection.form.type.geo_detection_countries_collection.class%'
+        tags:
+            - { name: form.type, alias: aligent_geo_detection_countries_collection }
+
+    aligent_geo_detection.form.type.geo_detection_country:
+        class: '%aligent_geo_detection.form.type.geo_detection_country.class%'
+        tags:
+            - { name: form.type, alias: aligent_geo_detection_country }
+
+    aligent_geo_detection.form.type.geo_detection_system_config:
+        class: '%aligent_geo_detection.form.type.geo_detection_system_config.class%'
+        tags:
+            - { name: form.type, alias: aligent_geo_detection_countries_system_config }
+
+    # GeoIP Reader
+    aligent_geo_detection.reader:
+        class: '%aligent_geo_detection.reader.class%'
+        lazy: true
+        arguments:
+            - '%aligent_geo_detection.database%'
+
+    # Context Configurator
+    aligent_geo_detection.layout_context_configurator.geo_detection:
+        class: '%aligent_geo_detection.layout_context_configurator.geo_detection.class%'
+        arguments:
+            - '@aligent_geo_detection.reader'
+            - '@oro_frontend.request.frontend_helper'
+            - '@aligent_geo_detection.provider.redirection_config_provider'
+            - '@request_stack'
+        tags:
+            - { name: layout.context_configurator }
+
+    # Providers
+    aligent_geo_detection.provider.redirection_config_provider:
+        class: '%aligent_geo_detection.provider.redirection_config_provider.class%'
+        arguments:
+            - '@oro_config.manager'
+
+    # Blocks
+    aligent_geo_detection.layout.block_type.redirection_block:
+        parent: oro_layout.block_type.abstract_configurable
+        calls:
+            - [setOptionsConfig, [{redirectionConfig: {required: true}}]]
+            - [setName, ['redirection_block']]
+        tags:
+            - { name: layout.block_type, alias: redirection_block }
+
+    aligent_geo_detection.layout.block_type.site_select_block:
+        parent: oro_layout.block_type.abstract_configurable
+        calls:
+            - [setOptionsConfig, [{sites: {required: true}}]]
+            - [setName, ['site_select_block']]
+        tags:
+            - { name: layout.block_type, alias: site_select_block }
+
+    # Data Providers
+    aligent_geo_detection.layout.data_provider.redirection_provider:
+        class: '%aligent_geo_detection.layout.data_provider.redirection_provider.class%'
+        arguments:
+            - '@aligent_geo_detection.reader'
+            - '@oro_frontend.request.frontend_helper'
+            - '@aligent_geo_detection.provider.redirection_config_provider'
+            - '@request_stack'
+            - '@logger'
+        tags:
+            - { name: layout.data_provider, alias: redirection }
+
+    # Cache Warmer
+    aligent_geo_detection.cache.warmer:
+        class: '%aligent_geo_detection.cache.warmer.class%'
+        arguments:
+            - '%aligent_geo_detection.database%'
+            - '@oro_config.manager'
+            - '@logger'
+        tags:
+            - { name: kernel.cache_warmer, priority: 0 }

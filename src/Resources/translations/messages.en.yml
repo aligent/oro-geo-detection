@@ -1,0 +1,7 @@
+aligent:
+    geo_detection:
+      config:
+        label: Geo Detection
+        database_download_url:
+          label: Download URL
+          tooltip: Download URL for the Geo Detection Database. Detail can be found at https://dev.maxmind.com/geoip/geoip2/geolite2/. It is used when the cache is warmed.

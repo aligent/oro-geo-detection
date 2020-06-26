@@ -1,0 +1,13 @@
+layout:
+  actions:
+    - '@setBlockTheme':
+        themes: 'layout.html.twig'
+    - '@add':
+        id: geo_detection_modal
+        parentId: page_container
+        prepend: true
+        blockType: redirection_block
+        options:
+            redirectionConfig: '=data["redirection"].getRedirectionConfig()'
+
+  conditions: 'context["display_redirect_modal"]'

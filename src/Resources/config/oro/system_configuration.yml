@@ -1,0 +1,57 @@
+system_configuration:
+    groups:
+        aligent:
+            title: 'Aligent'
+        aligent_geo_detection:
+            icon: 'fa-flag'
+            title: 'Geo Detection'
+        geo_detection:
+            title: 'Geo Detection'
+
+    fields:
+        aligent_geo_detection.enabled:
+            data_type: boolean
+            type: Oro\Bundle\ConfigBundle\Form\Type\ConfigCheckbox
+            options:
+                label: 'Enabled'
+                required: false
+                resettable: false
+
+        aligent_geo_detection.enabled_countries:
+            data_type: array
+            type: Aligent\GeoDetectionBundle\Form\Type\GeoDetectionCountriesSystemConfigType
+
+        aligent_geo_detection.database_download_url:
+            data_type: string
+            type: Symfony\Component\Form\Extension\Core\Type\TextType
+            options:
+                label: aligent.geo_detection.config.database_download_url.label
+                tooltip: aligent.geo_detection.config.database_download_url.tooltip
+
+    tree:
+        website_configuration:
+            commerce:
+                children:
+                    aligent:
+                        children:
+                            aligent_geo_detection:
+                                children:
+                                    geo_detection:
+                                        priority: 20
+                                        children:
+                                            - aligent_geo_detection.enabled
+                                            - aligent_geo_detection.enabled_countries
+                                            - aligent_geo_detection.database_download_url
+        system_configuration:
+            commerce:
+                children:
+                    aligent:
+                        children:
+                            aligent_geo_detection:
+                                children:
+                                    geo_detection:
+                                        priority: 20
+                                        children:
+                                            - aligent_geo_detection.enabled
+                                            - aligent_geo_detection.enabled_countries
+                                            - aligent_geo_detection.database_download_url

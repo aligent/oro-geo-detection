@@ -1,0 +1,12 @@
+layout:
+    actions:
+      - '@setBlockTheme':
+          themes: 'menu.html.twig'
+      - '@add':
+          id: site_select
+          parentId: main_menu_container
+          prepend: false
+          blockType: site_select_block
+          options:
+              sites: '=data["redirection"].getAlternateWebsites()'
+    conditions: 'context["geo_detection_enabled"]'

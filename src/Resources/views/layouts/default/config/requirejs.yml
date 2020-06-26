@@ -1,0 +1,3 @@
+config:
+    paths:
+        'aligentgeodetection/js/app/components/geo-detection-modal-component': 'bundles/aligentgeodetection/js/app/components/geo-detection-modal-component.js'

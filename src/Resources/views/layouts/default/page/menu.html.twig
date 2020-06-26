@@ -1,0 +1,30 @@
+{% block _site_select_widget %}
+    {% set firstSite = sites|first %}
+    <ul class="main-menu main-menu--location-selector">
+        <li class="location-selector main-menu__item main-menu__item--ancestor main-menu__item--floated-dropdown">
+            <span class="location-selector__label">Location: </span>
+            <a class="main-menu__link" href="{{ firstSite.url }}">
+                <span class="main-menu__text">{{ firstSite.label }}</span>
+            </a>
+            <button class="main-menu__button-arrow" data-toggle="dropdown" data-go-to="next">
+                <i class="fa-angle-down fa--no-offset"></i>
+            </button>
+
+            <div class="main-menu__sublist-container">
+                <div class="main-menu-column">
+                    <div class="main-menu--column__inner">
+                        <ul>
+                            {% for site in sites %}
+                                <li class="main-menu-column__item">
+                                    <a class="main-menu-column__link" href="{{ site.url }}">
+                                        {{ site.label }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+{% endblock %}
