@@ -21,6 +21,8 @@ use GeoIp2\Database\Reader;
 class GeoDetectionProvider
 {
     const CACHE_TTL = 3600;
+    // @todo: Extract this to a configurable option
+    const FALLBACK_COUNTRY_CODE = 'AU';
 
     /**
      * @var RequestStack
@@ -85,6 +87,7 @@ class GeoDetectionProvider
                 $this->cache->save($ip, $country, static::CACHE_TTL);
             } catch (AddressNotFoundException $exception) {
                 $this->logger->debug('Failed to read country code from IP database.');
+                $country = static::FALLBACK_COUNTRY_CODE;
             }
         } else {
             $country = $this->cache->fetch($ip);
