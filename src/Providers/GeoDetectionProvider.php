@@ -73,7 +73,6 @@ class GeoDetectionProvider
 
     /**
      * @return string|null - ISO2 Country Code of the origin IP address
-     * @throws \MaxMind\Db\Reader\InvalidDatabaseException
      */
     public function getClientCountry(): ?string
     {
@@ -85,7 +84,7 @@ class GeoDetectionProvider
                 $record = $this->reader->city($request->getClientIp());
                 $country = $record->country->isoCode;
                 $this->cache->save($ip, $country, static::CACHE_TTL);
-            } catch (AddressNotFoundException $exception) {
+            } catch (\Exception $exception) {
                 $this->logger->debug('Failed to read country code from IP database.');
                 $country = static::FALLBACK_COUNTRY_CODE;
             }
