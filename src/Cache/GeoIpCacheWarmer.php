@@ -32,21 +32,17 @@ class GeoIpCacheWarmer implements CacheWarmerInterface
     /**
      * @var string
      */
-    protected $databaseUrl;
-
-    /**
-     * @var string
-     */
     protected $database;
 
     /**
      * @var ConfigManager
      */
-    private $configManager;
+    protected $configManager;
+
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    protected $logger;
 
     /**
      * GeoIpCacheWarmer constructor.
@@ -59,13 +55,9 @@ class GeoIpCacheWarmer implements CacheWarmerInterface
         ConfigManager $configManager,
         LoggerInterface $logger
     ) {
-        $this->databaseUrl = $configManager->get(
-            Configuration::getConfigKeyByName(
-                Configuration::DATABASE_DOWNLOAD_URL
-            )
-        );
         $this->database = $database;
         $this->logger = $logger;
+        $this->configManager = $configManager;
     }
 
     /**
@@ -99,7 +91,12 @@ class GeoIpCacheWarmer implements CacheWarmerInterface
         $tempWorkingDir = dirname($cacheDir) . static::GEO_TEMP_DIR;
         $this->createTempWorkingDir($tempWorkingDir);
 
-        $tempDownloadFilePath = $this->downloadGeoDatabase($tempWorkingDir);
+        $databaseUrl = $this->configManager->get(
+            Configuration::getConfigKeyByName(
+                Configuration::DATABASE_DOWNLOAD_URL
+            )
+        );
+        $tempDownloadFilePath = $this->downloadGeoDatabase($databaseUrl, $tempWorkingDir);
         $this->decompressAndMove($tempDownloadFilePath, $this->database, $tempWorkingDir);
         $this->removeTempWorkingDir($tempWorkingDir);
     }
@@ -164,12 +161,13 @@ class GeoIpCacheWarmer implements CacheWarmerInterface
 
     /**
      * Builds the file path for the geo database download
+     * @param string $databaseUrl
      * @param string $tempWorkPath
      * @return string
      */
-    protected function createDownloadFilePath(string $tempWorkPath)
+    protected function createDownloadFilePath(string $databaseUrl, string $tempWorkPath)
     {
-        $remoteDownloadUrl = parse_url($this->databaseUrl);
+        $remoteDownloadUrl = parse_url($databaseUrl);
         parse_str(implode($remoteDownloadUrl), $params);
         $urlSuffixParam = $params['suffix'];
 
@@ -212,17 +210,18 @@ class GeoIpCacheWarmer implements CacheWarmerInterface
     }
 
     /**
+     * @param string $databaseUrl
      * @param string $tempWorkingDir
      * @return string
      */
-    protected function downloadGeoDatabase(string $tempWorkingDir): string
+    protected function downloadGeoDatabase(string $databaseUrl, string $tempWorkingDir): string
     {
-        $tempDownloadFilePath = $this->createDownloadFilePath($tempWorkingDir);
+        $tempDownloadFilePath = $this->createDownloadFilePath($databaseUrl, $tempWorkingDir);
 
         // Create HTTP client, fetch the file and save to cache
         $client = new Client();
         $request = $client->get(
-            $this->databaseUrl,
+            $databaseUrl,
             [],
             [
                 'save_to' => $tempDownloadFilePath
