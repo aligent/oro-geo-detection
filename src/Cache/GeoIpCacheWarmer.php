@@ -14,7 +14,7 @@ namespace Aligent\GeoDetectionBundle\Cache;
 
 use Aligent\GeoDetectionBundle\DependencyInjection\Configuration;
 use Carbon\Carbon;
-use Guzzle\Http\Client;
+use GuzzleHttp\Client;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use PharData;
 use PharFileInfo;
@@ -220,17 +220,15 @@ class GeoIpCacheWarmer implements CacheWarmerInterface
 
         // Create HTTP client, fetch the file and save to cache
         $client = new Client();
-        $request = $client->get(
+        $this->logger->info('Started Geo Database download');
+        $resource = \GuzzleHttp\Psr7\Utils::tryFopen($tempDownloadFilePath, 'w');
+        $response = $client->get(
             $databaseUrl,
-            [],
             [
-                'save_to' => $tempDownloadFilePath
+                'sink' => $resource
             ]
         );
-        $this->logger->info('Started Geo Database download');
-        $request->send();
         $this->logger->info('Finished Geo Database download');
-
         return $tempDownloadFilePath;
     }
 }
