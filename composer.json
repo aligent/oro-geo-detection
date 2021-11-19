@@ -2,7 +2,7 @@
     "name": "aligent/oro-geo-detection",
     "description": "A Bundle for OroCommerce to provide application level geo-detection using the maxmind db",
     "type": "library",
-    "license": "MIT",
+    "license": "GPL-3.0",
     "version": "4.2.0",
     "authors": [
         {
@@ -13,7 +13,8 @@
     "require": {
         "php": "~7.4.14 || ~8.0.0",
         "oro/commerce": "^4.2",
-        "geoip2/geoip2": "~2.0"
+        "geoip2/geoip2": "~2.0",
+        "guzzlehttp/guzzle": "^7.2"
     },
     "autoload": {
         "psr-4": { "Aligent\\GeoDetectionBundle\\": "./src/" }
