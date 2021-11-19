@@ -2,7 +2,7 @@
     "name": "aligent/oro-geo-detection",
     "description": "A Bundle for OroCommerce to provide application level geo-detection using the maxmind db",
     "type": "library",
-    "license": "MIT",
+    "license": "GPL-3.0",
     "version": "4.2.0",
     "authors": [
         {
