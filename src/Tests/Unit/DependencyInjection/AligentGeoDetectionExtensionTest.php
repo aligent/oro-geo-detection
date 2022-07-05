@@ -9,7 +9,6 @@
  */
 namespace Aligent\GeoDetectionBundle\Tests\Unit\DependencyInjection;
 
-
 use Aligent\GeoDetectionBundle\DependencyInjection\AligentGeoDetectionExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\DependencyInjection\ExtensionTestCase;
 
@@ -17,7 +16,7 @@ class AligentGeoDetectionExtensionTest extends ExtensionTestCase
 {
     public function testLoad(): void
     {
-        $this->loadExtension(new AligentGeoDetectionExtension(), ['database' => []]);
+        $this->loadExtension(new AligentGeoDetectionExtension(), ['aligent_geo_detection' => ['database' => '']]);
 
         // Services
         $expectedDefinitions = [
