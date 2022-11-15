@@ -78,9 +78,9 @@ class GeoIpCacheWarmer implements CacheWarmerInterface
     /**
      * Warms up the cache.
      *
-     * @param string $cacheDir The cache directory
+     * {@inheritdoc}
      */
-    public function warmUp($cacheDir)
+    public function warmUp($cacheDir): void
     {
         //avoid downloading if db is up to date
         if ($this->isGeoDatabaseUpToDate()) {
