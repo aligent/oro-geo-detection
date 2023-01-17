@@ -3,7 +3,7 @@ OroCommerce Geo Detection Bundle
 
 Facts
 -----
-- version: 4.2.0
+- version: 5.0.0
 - composer name: aligent/oro-geo-detection
 
 Description
