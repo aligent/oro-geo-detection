@@ -53,7 +53,7 @@ class GeoDetectionContextConfigurator implements ContextConfiguratorInterface
         RedirectionConfigurationProvider $configurationProvider,
         RequestStack $requestStack
     ) {
-    
+
         $this->reader = $reader;
         $this->frontendHelper = $frontendHelper;
         $this->redirectionConfigProvider = $configurationProvider;

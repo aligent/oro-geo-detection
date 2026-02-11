@@ -54,7 +54,6 @@ class RedirectionConfigurationProvider
                 return $site;
             }
         }
-        return;
     }
 
     /**
@@ -74,7 +73,7 @@ class RedirectionConfigurationProvider
     /**
      * @return array
      */
-    public function getEnabledWebsites()
+    public function getEnabledWebsites(): array
     {
         return $this->enabledRedirects;
     }
@@ -90,7 +89,7 @@ class RedirectionConfigurationProvider
     /**
      * @return bool
      */
-    public function hasRedirects()
+    public function hasRedirects(): bool
     {
         return count($this->enabledRedirects) > 0;
     }

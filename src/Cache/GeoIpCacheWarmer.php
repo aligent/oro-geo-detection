@@ -17,7 +17,6 @@ use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use PharData;
-use PharFileInfo;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -70,7 +69,7 @@ class GeoIpCacheWarmer implements CacheWarmerInterface
      *
      * @return bool true if the warmer is optional, false otherwise
      */
-    public function isOptional()
+    public function isOptional(): bool
     {
         return true;
     }
@@ -80,12 +79,12 @@ class GeoIpCacheWarmer implements CacheWarmerInterface
      *
      * {@inheritdoc}
      */
-    public function warmUp($cacheDir): void
+    public function warmUp($cacheDir): array
     {
         //avoid downloading if db is up to date
         if ($this->isGeoDatabaseUpToDate()) {
             $this->logger->info('Geo Database still up to date, no new download triggered');
-            return;
+            return [];
         }
 
         $tempWorkingDir = dirname($cacheDir) . static::GEO_TEMP_DIR;
@@ -99,6 +98,8 @@ class GeoIpCacheWarmer implements CacheWarmerInterface
         $tempDownloadFilePath = $this->downloadGeoDatabase($databaseUrl, $tempWorkingDir);
         $this->decompressAndMove($tempDownloadFilePath, $this->database, $tempWorkingDir);
         $this->removeTempWorkingDir($tempWorkingDir);
+
+        return [];
     }
 
     protected function isGeoDatabaseUpToDate()

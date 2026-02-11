@@ -3,11 +3,10 @@
 namespace Aligent\GeoDetectionBundle\Providers;
 
 use Doctrine\Common\Cache\CacheProvider;
-use GeoIp2\Exception\AddressNotFoundException;
+use GeoIp2\Database\Reader;
 use Oro\Bundle\FrontendBundle\Request\FrontendHelper;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use GeoIp2\Database\Reader;
 
 /**
  * Class GeoDetectionProvider

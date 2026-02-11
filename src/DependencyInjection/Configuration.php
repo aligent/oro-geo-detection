@@ -31,10 +31,8 @@ class Configuration implements ConfigurationInterface
 
     /**
      * Generates the configuration tree builder.
-     *
-     * @return TreeBuilder The tree builder
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder(AligentGeoDetectionExtension::ALIAS);
         $rootNode = $treeBuilder->getRootNode();
@@ -60,7 +58,7 @@ class Configuration implements ConfigurationInterface
      * @param string $name
      * @return string
      */
-    public static function getConfigKeyByName($name)
+    public static function getConfigKeyByName($name): string
     {
         return sprintf(
             AligentGeoDetectionExtension::ALIAS . '%s%s',

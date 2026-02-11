@@ -39,7 +39,7 @@ class GeoDetectionCountriesSystemConfigType extends AbstractType
     /**
      * @return string
      */
-    public function getParent()
+    public function getParent(): ?string
     {
         return GeoDetectionCountriesCollectionType::class;
     }
@@ -55,7 +55,7 @@ class GeoDetectionCountriesSystemConfigType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return static::NAME;
     }

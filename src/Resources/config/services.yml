@@ -70,9 +70,10 @@ services:
 
     # Cache Provider
     aligent_geo_detection.cache:
-        parent: oro.cache.abstract
-        calls:
-            - [ setNamespace, [ 'geo_ip' ] ]
+        #        public: false
+        parent: oro.data.cache
+        tags:
+            - { name: 'cache.pool', namespace: 'geo_ip' }
 
     # Blocks
     aligent_geo_detection.layout.block_type.redirection_block:
